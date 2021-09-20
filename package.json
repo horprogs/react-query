@@ -1,26 +1,32 @@
 {
-  "name": "react-playwright",
+  "name": "react-query-tutorial",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.0",
+    "@mui/material": "^5.0.0",
+    "add": "^2.0.6",
+    "axios": "^0.21.1",
+    "axios-mock-adapter": "^1.20.0",
+    "date-fns": "^2.23.0",
+    "js-cookie": "^3.0.0",
+    "lodash": "^4.17.21",
+    "notistack": "^1.0.6-next.3",
+    "path-to-regexp": "^6.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "react-query": "^3.21.0",
+    "react-router-dom": "^5.2.1",
+    "styled-components": "^5.3.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "TSC_COMPILE_ON_ERROR=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint src --ext ts,tsx"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +45,31 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.14.1",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/js-cookie": "^2.2.7",
+    "@types/lodash": "^4.14.172",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.8",
+    "@types/styled-components": "^5.1.12",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-jest": "^24.4.2",
+    "prettier": "^2.3.2",
+    "react-scripts": "4.0.3",
+    "typescript": "^4.1.2",
+    "web-vitals": "^1.0.1",
+    "eslint-plugin-prettier": "^4.0.0"
   }
 }
