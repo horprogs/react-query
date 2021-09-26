@@ -5,7 +5,7 @@ export const apiRoutes = {
   appointment: '/api/appointment/:id',
   getServices: '/api/getServices',
   getCarDetail: '/api/getCarDetail/:id',
-  getInsurance: '/api/getInsurance',
+  getInsurance: '/api/getInsurance/:id',
   job: '/api/job/:id?',
 };
 

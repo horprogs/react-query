@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import './App.css';
-import UserList from './components/UserList/UserList';
 import Auth from './pages/Auth';
 import { pageRoutes } from './routes';
 import { getProfile } from './api/auth';
 import { AppBar, Box, Toolbar } from '@mui/material';
 import { ProfileInterface } from './interfaces/auth';
 import Appointment from './pages/Appointment';
+import Appointments from './pages/Appointments';
 
 function App() {
   const [user, setUser] = useState<ProfileInterface>();
@@ -44,7 +44,7 @@ function App() {
       <Box width={500} m="auto" mt={2}>
         <Switch>
           <Route path={pageRoutes.main} exact>
-            <UserList />
+            <Appointments />
           </Route>
           <Route path={pageRoutes.auth} exact>
             <Auth />

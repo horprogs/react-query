@@ -39,4 +39,5 @@ export interface InsuranceDetailsInterface {
 export interface JobInterface {
   id?: number;
   name: string;
+  appointmentId?: number;
 }

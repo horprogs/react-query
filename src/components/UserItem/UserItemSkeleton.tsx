@@ -13,10 +13,20 @@ const UserItemSkeleton = () => {
       <ListItemAvatar>
         <Skeleton animation="wave" variant="circular" height={50} width={50} />
       </ListItemAvatar>
-      <Skeleton animation="wave" variant="rectangular" height={15} width="60%" />
+      <Skeleton
+        animation="wave"
+        variant="rectangular"
+        height={15}
+        width="60%"
+      />
       <ListItemSecondaryAction>
         <IconButton edge="end">
-          <Skeleton animation="wave" variant="rectangular" height={15} width={50} />
+          <Skeleton
+            animation="wave"
+            variant="rectangular"
+            height={15}
+            width={50}
+          />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>

@@ -4,28 +4,55 @@ import CircularProgress from '@mui/material/CircularProgress';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAddJob, useDeleteJob, useGetJobs } from '../../api/jobs';
+import Skeleton from '@mui/material/Skeleton';
+import { pushNotification } from '../../utils/notifications';
 
-const Jobs = () => {
+interface Props {
+  appointmentId: number;
+}
+
+const Jobs = ({ appointmentId }: Props) => {
   const [jobName, setJobName] = useState('');
 
   const { data, isLoading } = useGetJobs();
 
   const mutationAdd = useAddJob((oldData, newData) => [...oldData, newData]);
-  const mutationDelete = useDeleteJob((oldData, id) => {
-    console.log(oldData, id);
-    return oldData.filter((item) => item.id !== id);
-  });
+  const mutationDelete = useDeleteJob((oldData, id) =>
+    oldData.filter((item) => item.id !== id)
+  );
 
-  const onAdd = () => {
-    mutationAdd.mutate({
-      name: jobName,
-    });
-    setJobName('');
+  const onAdd = async () => {
+    try {
+      await mutationAdd.mutateAsync({
+        name: jobName,
+        appointmentId,
+      });
+      setJobName('');
+    } catch (e) {
+      pushNotification(`Cannot add the job: ${jobName}`);
+    }
   };
 
-  const onDelete = (id: number) => {
-    mutationDelete.mutate(id);
+  const onDelete = async (id: number) => {
+    try {
+      await mutationDelete.mutateAsync(id);
+    } catch (e) {
+      pushNotification(`Cannot delete the job`);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <Box mt={2}>
+        <Box mb={2}>
+          <Skeleton animation="wave" variant="rectangular" height={15} />
+        </Box>
+        <Box mb={2}>
+          <Skeleton animation="wave" variant="rectangular" height={15} />
+        </Box>
+      </Box>
+    );
+  }
 
   if (!data) {
     return null;
@@ -33,8 +60,8 @@ const Jobs = () => {
 
   return (
     <Box>
-      {data.map((item) => (
-        <Box key={item.id} display="flex" alignItems="center" mt={2}>
+      {data.map((item, idx) => (
+        <Box key={item.id || idx} display="flex" alignItems="center" mt={2}>
           <Box width="100%">
             <Typography>{item.name}</Typography>
           </Box>
@@ -44,7 +71,7 @@ const Jobs = () => {
               aria-label="delete"
               size="small"
               onClick={() => {
-                onDelete(item.id);
+                onDelete(item.id!);
               }}
             >
               <DeleteIcon />

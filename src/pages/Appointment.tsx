@@ -1,37 +1,54 @@
 import React, { useRef, useState } from 'react';
-import { Box, Button, Card, CircularProgress, Typography } from '@mui/material';
+import { Box, Button, Card, Typography } from '@mui/material';
 import {
   useGetAppointment,
   useGetInsurance,
-  usePatchAppointment,
   usePrefetchCarDetails,
 } from '../api/appointments';
 import { useParams } from 'react-router-dom';
-import ServicesCheck from '../components/ServicesCheck';
-import Skeleton from '@mui/material/Skeleton';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CarDetails from '../components/CarDetails/CarDetails';
 import Jobs from '../components/Jobs/Jobs';
+import History from '../components/History/History';
+import ServicesList from '../components/ServicesList/ServicesList';
+import Skeleton from '@mui/material/Skeleton';
 
 const Appointment = () => {
   const prefetched = useRef<boolean>();
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading, isFetching } = useGetAppointment(+id);
+  const { data, isLoading } = useGetAppointment(+id);
   const { data: insurance } = useGetInsurance(data?.hasInsurance ? +id : null);
-  const mutation = usePatchAppointment(+id, (oldData, newData) => {
-    return newData;
-  });
   const [showAdditional, setShowAdditional] = useState(false);
   const prefetchCarDetails = usePrefetchCarDetails(+id);
 
-  const onChangeServices = () => {};
-
-  const onSubmit = () => {
-    mutation.mutate([data!]);
-  };
-
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <Box>
+        <Box mb={2}>
+          <Card>
+            <Skeleton variant="rectangular" height={303} animation="wave" />
+          </Card>
+        </Box>
+
+        <Box mb={2}>
+          <Card>
+            <Skeleton variant="rectangular" height={173} animation="wave" />
+          </Card>
+        </Box>
+
+        <Box mb={2}>
+          <Card>
+            <Skeleton variant="rectangular" height={125} animation="wave" />
+          </Card>
+        </Box>
+
+        <Box mb={2}>
+          <Card>
+            <Skeleton variant="rectangular" height={145} animation="wave" />
+          </Card>
+        </Box>
+      </Box>
+    );
   }
 
   if (!data) {
@@ -46,10 +63,7 @@ const Appointment = () => {
             {data.name} {insurance?.allCovered && <DoneAllIcon />}
           </Typography>
           <Box mt={3}>
-            <ServicesCheck
-              checked={data.services}
-              onChange={onChangeServices}
-            />
+            <ServicesList checked={data.services} onChange={() => {}} />
           </Box>
         </Box>
       </Card>
@@ -59,55 +73,7 @@ const Appointment = () => {
             <Typography display="block" variant="h4" component="h4">
               History
             </Typography>
-            {isFetching ? (
-              <>
-                <Box pt={2}>
-                  <Skeleton
-                    animation="wave"
-                    variant="rectangular"
-                    height={15}
-                  />
-                </Box>
-                <Box pt={2}>
-                  <Skeleton
-                    animation="wave"
-                    variant="rectangular"
-                    height={15}
-                  />
-                </Box>
-                <Box pt={2}>
-                  <Skeleton
-                    animation="wave"
-                    variant="rectangular"
-                    height={15}
-                  />
-                </Box>
-              </>
-            ) : (
-              data!.history.map((item) => (
-                <Typography variant="body1" key={item.date}>
-                  Date: {item.date} <br />
-                  Comment: {item.comment}
-                </Typography>
-              ))
-            )}
-            {!data.history.length && !isFetching && (
-              <Box mt={2}>
-                <span>Nothing found</span>
-              </Box>
-            )}
-
-            <Box mt={3}>
-              <Button
-                variant="outlined"
-                color="primary"
-                size="large"
-                onClick={onSubmit}
-                disabled={!data || mutation.isLoading}
-              >
-                Save
-              </Button>
-            </Box>
+            <History id={+id} />
           </Box>
         </Card>
       </Box>
@@ -150,7 +116,7 @@ const Appointment = () => {
             <Typography display="block" variant="h4" component="h4">
               Jobs
             </Typography>
-            <Jobs />
+            <Jobs appointmentId={data.id} />
           </Box>
         </Card>
       </Box>

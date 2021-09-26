@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { getTokenByPassword } from '../api/auth';
 import Cookies from 'js-cookie';
-import { useSnackbar } from 'notistack';
 import { useHistory } from 'react-router-dom';
 import { pageRoutes } from '../routes';
+import { toast } from 'react-toastify';
 
 const Auth = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
 
   const [email, setEmail] = useState('');
@@ -27,13 +26,25 @@ const Auth = () => {
         Cookies.set('token', resp.data.token);
         history.replace(pageRoutes.main);
       } else {
-        enqueueSnackbar('Invalid details', {
-          variant: 'error',
+        toast.error('Invalid details', {
+          position: 'bottom-left',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
       }
     } catch (e) {
-      enqueueSnackbar('Invalid details', {
-        variant: 'error',
+      toast.error('Invalid details', {
+        position: 'bottom-left',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
     }
   };

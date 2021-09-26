@@ -50,9 +50,9 @@ export const usePrefetch = <T>(url: string | null, params?: object) => {
       return;
     }
 
-    queryClient.prefetchQuery<T>([url!, params], ({ queryKey }) =>
-      // @ts-ignore
-      fetcher({ queryKey })
+    queryClient.prefetchQuery<T, Error, T, QueryKeyT>(
+      [url!, params],
+      ({ queryKey }) => fetcher({ queryKey })
     );
   };
 };
@@ -60,7 +60,7 @@ export const usePrefetch = <T>(url: string | null, params?: object) => {
 export const useFetch = <T>(
   url: string | null,
   params?: object,
-  config?: UseQueryOptions<T, Error, T, QueryKeyT>
+  config?: UseQueryOptions<T, Error, T, QueryKeyT>,
 ) => {
   const context = useQuery<T, Error, T, QueryKeyT>(
     [url!, params],
@@ -74,24 +74,47 @@ export const useFetch = <T>(
   return context;
 };
 
+const useGenericMutation = <T, S>(
+  func: (data: S) => Promise<AxiosResponse<S>>,
+  url: string,
+  params?: object,
+  updater?: ((oldData: T, newData: S) => T) | undefined
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<AxiosResponse, AxiosError, S>(func, {
+    onMutate: async (data) => {
+      await queryClient.cancelQueries([url!, params]);
+
+      const previousData = queryClient.getQueryData([url!, params]);
+
+      if (updater) {
+        queryClient.setQueryData<T>([url!, params], (oldData) => {
+          return updater(oldData!, data);
+        });
+      }
+
+      return previousData;
+    },
+    onError: (err, _, context) => {
+      queryClient.setQueryData([url!, params], context);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries([url!, params]);
+    },
+  });
+};
+
 export const useDelete = <T>(
   url: string,
   params?: object,
   updater?: (oldData: T, id: string | number) => T
 ) => {
-  const queryClient = useQueryClient();
-
-  return useMutation<AxiosResponse, AxiosError, string | number>(
+  return useGenericMutation<T, string | number>(
     (id) => api.delete(`${url}/${id}`),
-    {
-      onSuccess: (response, id) => {
-        if (response && updater) {
-          queryClient.setQueryData<T>([url!, params], (oldData) =>
-            updater(oldData!, id)
-          );
-        }
-      },
-    }
+    url,
+    params,
+    updater
   );
 };
 
@@ -100,18 +123,11 @@ export const usePost = <T, S>(
   params?: object,
   updater?: (oldData: T, newData: S) => T
 ) => {
-  const queryClient = useQueryClient();
-  return useMutation<AxiosResponse, AxiosError, S>(
+  return useGenericMutation<T, S>(
     (data) => api.post<S>(url, data),
-    {
-      onSuccess: (response) => {
-        if (response.data && updater) {
-          queryClient.setQueryData<T>([url!, params], (oldData) =>
-            updater(oldData!, response.data)
-          );
-        }
-      },
-    }
+    url,
+    params,
+    updater
   );
 };
 
@@ -120,17 +136,10 @@ export const useUpdate = <T, S>(
   params?: object,
   updater?: (oldData: T, newData: S) => T
 ) => {
-  const queryClient = useQueryClient();
-  return useMutation<AxiosResponse, AxiosError, [S]>(
-    ([data]) => api.patch<S>(url, data),
-    {
-      onSuccess: (response) => {
-        if (response.data && updater) {
-          queryClient.setQueryData<T>([url!, params], (oldData) => {
-            return updater(oldData!, response.data);
-          });
-        }
-      },
-    }
+  return useGenericMutation<T, S>(
+    (data) => api.patch<S>(url, data),
+    url,
+    params,
+    updater
   );
 };

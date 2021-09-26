@@ -24,18 +24,21 @@ const UserItem = ({ name, date, id }: Props) => {
   return (
     <ListItem>
       <ListItemAvatar>
-        <Avatar></Avatar>
+        <Avatar />
       </ListItemAvatar>
       <ListItemText
         primary={upperFirst(name)}
         secondary={format(new Date(date), 'd MMM yyyy')}
       />
       <ListItemSecondaryAction>
-        <IconButton edge="end">
-          <Link to={pathToUrl(pageRoutes.appointment, { id })}>
+        <Link
+          to={pathToUrl(pageRoutes.appointment, { id })}
+          style={{ color: 'inherit' }}
+        >
+          <IconButton edge="end">
             <InsertInvitationIcon />
-          </Link>
-        </IconButton>
+          </IconButton>
+        </Link>
       </ListItemSecondaryAction>
     </ListItem>
   );

@@ -32,10 +32,16 @@ export const usePatchAppointment = (
   );
 
 export const useGetCarDetail = (id: number | null) =>
-  useFetch<CarDetailInterface>(pathToUrl(apiRoutes.getCarDetail, { id }));
+  useFetch<CarDetailInterface>(
+    pathToUrl(apiRoutes.getCarDetail, { id }),
+    undefined,
+    { staleTime: 2000 }
+  );
 
 export const useGetInsurance = (id: number | null) =>
-  useFetch<InsuranceDetailsInterface>(id ? apiRoutes.getInsurance : null);
+  useFetch<InsuranceDetailsInterface>(
+    id ? pathToUrl(apiRoutes.getInsurance, { id }) : null
+  );
 
 export const usePrefetchCarDetails = (id: number | null) =>
   usePrefetch<InsuranceDetailsInterface>(

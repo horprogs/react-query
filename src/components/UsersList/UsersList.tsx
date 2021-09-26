@@ -4,16 +4,14 @@ import UserItem from '../UserItem/UserItem';
 import UserItemSkeleton from '../UserItem/UserItemSkeleton';
 import { useGetAppointmentsList } from '../../api/appointments';
 
-const UserList = () => {
-  const context = useGetAppointmentsList();
-
+const UsersList = () => {
   const {
     data: list,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = context;
+  } = useGetAppointmentsList();
 
   return (
     <>
@@ -65,4 +63,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default UsersList;

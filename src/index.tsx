@@ -4,8 +4,9 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { SnackbarProvider } from 'notistack';
+import 'react-toastify/dist/ReactToastify.css';
 import { initializeMockAdapter } from './utils/mockApi';
+import { ToastContainer } from 'react-toastify';
 
 initializeMockAdapter();
 
@@ -21,9 +22,8 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <QueryClientProvider client={queryClient}>
-        <SnackbarProvider maxSnack={3}>
-          <App />
-        </SnackbarProvider>
+        <App />
+        <ToastContainer />
       </QueryClientProvider>
     </Router>
   </React.StrictMode>,

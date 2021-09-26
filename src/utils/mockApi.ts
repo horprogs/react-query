@@ -5,10 +5,10 @@ import { apiRoutes } from '../routes';
 import {
   appointments,
   carDetailsMock,
-  insuranceDetailsMock,
   jobsMocks,
 } from '../fixtures/appointments';
 import { services } from '../fixtures/services';
+import { InsuranceDetailsInterface } from '../interfaces/appointments';
 
 const ADMIN_TOKEN = 'admintoken';
 const MODERATOR_TOKEN = 'moderatortoken';
@@ -34,16 +34,6 @@ const getUser = (config: AxiosRequestConfig) =>
 const clone = (data: any) => JSON.parse(JSON.stringify(data));
 const exclude = [/assets\//];
 
-axios.interceptors.request.use((config) => {
-  if (!exclude.find((pattern) => pattern.test(config.url!))) {
-    console.groupCollapsed(`=> ${config.method?.toUpperCase()} ${config.url}`);
-    console.dir(clone(config));
-    console.groupEnd();
-  }
-
-  return config;
-});
-
 axios.interceptors.response.use((response) => {
   if (!exclude.find((pattern) => pattern.test(response?.config?.url!))) {
     console.groupCollapsed(
@@ -57,7 +47,7 @@ axios.interceptors.response.use((response) => {
 });
 
 export const initializeMockAdapter = () => {
-  const mock = new MockAdapter(axios, { delayResponse: 1 });
+  const mock = new MockAdapter(axios, { delayResponse: 1000 });
 
   mock.onGet(apiRoutes.getUserList).reply((config) => {
     if (!getUser(config)) {
@@ -74,6 +64,7 @@ export const initializeMockAdapter = () => {
       {
         nextId,
         data: appointments.slice((pageParam - 1) * COUNT, pageParam * COUNT),
+        count: appointments.length,
       },
     ];
   });
@@ -151,12 +142,50 @@ export const initializeMockAdapter = () => {
     return [200, appointments[idx]];
   });
 
-  mock.onGet(apiRoutes.getServices).reply(() => {
+  mock.onGet(apiRoutes.getServices).reply((config) => {
+    if (!getUser(config)) {
+      return [403];
+    }
+
+    const failed = !!Math.round(Math.random());
+
+    if (failed) {
+      return [500];
+    }
+
     return [200, services];
   });
 
-  mock.onGet(apiRoutes.getInsurance).reply(() => {
-    return [200, insuranceDetailsMock];
+  mock.onGet(pathToRegexp(apiRoutes.getInsurance)).reply((config) => {
+    if (!getUser(config)) {
+      return [403];
+    }
+
+    const result = match<{ id: string }>(apiRoutes.getInsurance, {
+      decode: decodeURIComponent,
+    })(config.url!);
+
+    if (result === false) {
+      return [403];
+    }
+
+    const { id } = result.params;
+
+    if (+id === 1) {
+      return [
+        200,
+        {
+          allCovered: true,
+        } as InsuranceDetailsInterface,
+      ];
+    }
+
+    return [
+      200,
+      {
+        allCovered: false,
+      } as InsuranceDetailsInterface,
+    ];
   });
 
   mock.onGet(pathToRegexp(apiRoutes.getCarDetail)).reply((config) => {
@@ -190,9 +219,7 @@ export const initializeMockAdapter = () => {
       return [403];
     }
 
-    const { id } = result.params;
-
-    return [200, []];
+    return [200, jobsMocks];
   });
 
   mock.onPost(pathToRegexp(apiRoutes.job)).reply((config) => {
@@ -202,8 +229,14 @@ export const initializeMockAdapter = () => {
       return [403];
     }
 
+    const data = JSON.parse(config.data);
+
+    if (data.appointmentId === 2) {
+      return [400];
+    }
+
     const body = {
-      ...JSON.parse(config.data),
+      ...data,
       id: Math.floor(Math.random() * 10000000),
     };
     jobsMocks.push(body);

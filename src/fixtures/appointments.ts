@@ -1,7 +1,6 @@
 import {
   AppointmentInterface,
   CarDetailInterface,
-  InsuranceDetailsInterface,
   JobInterface,
 } from '../interfaces/appointments';
 
@@ -118,10 +117,6 @@ export const appointments = [
   },
 ] as AppointmentInterface[];
 
-export const insuranceDetailsMock = {
-  allCovered: true,
-} as InsuranceDetailsInterface;
-
 export const carDetailsMock = [
   {
     id: 1,
@@ -130,4 +125,4 @@ export const carDetailsMock = [
   },
 ] as CarDetailInterface[];
 
-export let jobsMocks = [] as JobInterface[];
+export const jobsMocks = [] as JobInterface[];
