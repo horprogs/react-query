@@ -265,8 +265,6 @@ export const initializeMockAdapter = () => {
 
     const [body] = jobsMocks.splice(idx, 1);
 
-    console.log(body);
-
     return [200, body];
   });
 };

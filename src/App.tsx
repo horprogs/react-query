@@ -1,42 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import './App.css';
 import Auth from './pages/Auth';
 import { pageRoutes } from './routes';
-import { getProfile } from './api/auth';
+import { useGetProfile } from './api/auth';
 import { AppBar, Box, Toolbar } from '@mui/material';
-import { ProfileInterface } from './interfaces/auth';
 import Appointment from './pages/Appointment';
 import Appointments from './pages/Appointments';
+import UserProfile from './components/UserProfile/UserProfile';
 
 function App() {
-  const [user, setUser] = useState<ProfileInterface>();
   const history = useHistory();
-  const location = useLocation();
-
-  const fetchProfile = async () => {
-    try {
-      const resp = await getProfile();
-      if (resp.data.user) {
-        setUser(resp.data.user);
-      }
-    } catch (e) {
-      history.replace(pageRoutes.auth);
-    }
-  };
+  const { error } = useGetProfile();
 
   useEffect(() => {
-    fetchProfile();
-  }, [location.pathname]);
+    if (error) {
+      history.replace(pageRoutes.auth);
+    }
+  }, [error]);
 
   return (
     <>
       <AppBar position="static">
         <Toolbar variant="dense">
           <Box display="flex" justifyContent="flex-end" width="100%">
-            <Box display="flex" justifyContent="flex-end">
-              {user ? `User: ${user.name}` : 'Unauthorized'}
-            </Box>
+            <UserProfile />
           </Box>
         </Toolbar>
       </AppBar>

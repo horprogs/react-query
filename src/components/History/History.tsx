@@ -9,7 +9,7 @@ type Props = {
 
 const History = ({ id }: Props) => {
   const { data, isFetching } = useGetAppointment(+id);
-  const mutation = usePatchAppointment(+id, (oldData, newData) => newData);
+  const mutation = usePatchAppointment(+id);
 
   if (isFetching) {
     return (

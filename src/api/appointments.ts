@@ -18,17 +18,9 @@ export const useGetAppointmentsList = () =>
 export const useGetAppointment = (id: number) =>
   useFetch<AppointmentInterface>(pathToUrl(apiRoutes.appointment, { id }));
 
-export const usePatchAppointment = (
-  id: number,
-  updater: (
-    oldData: AppointmentInterface,
-    newData: AppointmentInterface
-  ) => AppointmentInterface
-) =>
+export const usePatchAppointment = (id: number) =>
   useUpdate<AppointmentInterface, AppointmentInterface>(
-    pathToUrl(apiRoutes.appointment, { id }),
-    undefined,
-    updater
+    pathToUrl(apiRoutes.appointment, { id })
   );
 
 export const useGetCarDetail = (id: number | null) =>

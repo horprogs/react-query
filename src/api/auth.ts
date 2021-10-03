@@ -1,7 +1,7 @@
 import { apiRoutes } from '../routes';
 import { api } from '../utils/api';
-import Cookies from 'js-cookie';
 import { ProfileInterface } from '../interfaces/auth';
+import { useFetch } from '../utils/reactQuery';
 
 export const getTokenByPassword = (email: string, password: string) =>
   api.post<{ token: string }>(apiRoutes.getTokenByPassword, {
@@ -9,7 +9,11 @@ export const getTokenByPassword = (email: string, password: string) =>
     password,
   });
 
-export const getProfile = () =>
-  api.get<{ user: ProfileInterface }>(apiRoutes.getProfile, {
-    headers: { token: Cookies.get('token') },
-  });
+export const useGetProfile = () => {
+  const context = useFetch<{ user: ProfileInterface }>(
+    apiRoutes.getProfile,
+    undefined,
+    { retry: false }
+  );
+  return { ...context, data: context.data?.user };
+};

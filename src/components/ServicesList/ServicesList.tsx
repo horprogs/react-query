@@ -47,7 +47,6 @@ const ServicesList = ({ checked, onChange }: Props) => {
             )}
             onReset={reset}
           >
-            {' '}
             <React.Suspense
               fallback={
                 <Box width="100%">

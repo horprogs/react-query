@@ -60,7 +60,7 @@ export const usePrefetch = <T>(url: string | null, params?: object) => {
 export const useFetch = <T>(
   url: string | null,
   params?: object,
-  config?: UseQueryOptions<T, Error, T, QueryKeyT>,
+  config?: UseQueryOptions<T, Error, T, QueryKeyT>
 ) => {
   const context = useQuery<T, Error, T, QueryKeyT>(
     [url!, params],
@@ -92,6 +92,8 @@ const useGenericMutation = <T, S>(
         queryClient.setQueryData<T>([url!, params], (oldData) => {
           return updater(oldData!, data);
         });
+      } else {
+        queryClient.setQueryData<S>([url!, params], () => data);
       }
 
       return previousData;

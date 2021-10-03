@@ -5,10 +5,13 @@ import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 import { pageRoutes } from '../routes';
 import { toast } from 'react-toastify';
+import { useQueryClient } from 'react-query';
 
 const Auth = () => {
   const history = useHistory();
+  const queryClient = useQueryClient();
 
+  const [btnLoading, setBtnLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,11 +23,13 @@ const Auth = () => {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+    setBtnLoading(true);
     try {
       const resp = await getTokenByPassword(email, password);
       if (resp.data.token) {
         Cookies.set('token', resp.data.token);
         history.replace(pageRoutes.main);
+        queryClient.invalidateQueries();
       } else {
         toast.error('Invalid details', {
           position: 'bottom-left',
@@ -46,6 +51,8 @@ const Auth = () => {
         draggable: true,
         progress: undefined,
       });
+    } finally {
+      setBtnLoading(false);
     }
   };
 
@@ -106,6 +113,7 @@ const Auth = () => {
           variant="contained"
           color="primary"
           size="large"
+          disabled={btnLoading}
           fullWidth
         >
           Submit
