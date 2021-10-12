@@ -13,7 +13,7 @@ The project is written in TypeScript and uses CRA, React query, axios mock serve
 - Show information about one particular appointment
 - Save and view changes history
 - Prefetch additional information
-- Add and amend required jobs ]
+- Add and amend required jobs
 
 ### Cases covered in the app:
 
