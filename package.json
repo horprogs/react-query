@@ -2,6 +2,7 @@
   "name": "react-query-tutorial",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://react-query-tutorial.herokuapp.com/",
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -28,8 +29,7 @@
     "build": "react-scripts build",
     "test": "jest --maxWorkers=4",
     "eject": "react-scripts eject",
-    "lint": "npx eslint src --ext ts,tsx",
-    "run": "serve -s build"
+    "lint": "npx eslint src --ext ts,tsx"
   },
   "eslintConfig": {
     "extends": [

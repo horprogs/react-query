@@ -2,6 +2,8 @@
 
 An example of building the app using React Query.
 
+**Demo:** https://react-query-tutorial.herokuapp.com/
+
 The project is written in TypeScript and uses CRA, React query, axios mock server and material UI for easier prototyping.
 
 ## Functionality
