@@ -10,13 +10,7 @@ import { ToastContainer } from 'react-toastify';
 
 initializeMockAdapter();
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
