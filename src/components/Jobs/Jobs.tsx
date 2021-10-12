@@ -43,7 +43,7 @@ const Jobs = ({ appointmentId }: Props) => {
 
   if (isLoading) {
     return (
-      <Box mt={2}>
+      <Box mt={2} data-testid="loading-skeleton">
         <Box mb={2}>
           <Skeleton animation="wave" variant="rectangular" height={15} />
         </Box>
@@ -73,6 +73,7 @@ const Jobs = ({ appointmentId }: Props) => {
               onClick={() => {
                 onDelete(item.id!);
               }}
+              data-testid={`delete-${item.id}`}
             >
               <DeleteIcon />
             </Fab>
@@ -87,6 +88,9 @@ const Jobs = ({ appointmentId }: Props) => {
           onChange={(e) => setJobName(e.target.value)}
           fullWidth
           disabled={mutationAdd.isLoading}
+          inputProps={{
+            'data-testid': 'input',
+          }}
         />
         <Box ml={1} position="relative">
           <Fab
@@ -97,6 +101,7 @@ const Jobs = ({ appointmentId }: Props) => {
             }}
             size="small"
             disabled={mutationAdd.isLoading || !jobName}
+            data-testid="add"
           >
             <AddIcon />
           </Fab>

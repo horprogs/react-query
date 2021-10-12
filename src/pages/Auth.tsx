@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import { getTokenByPassword } from '../api/auth';
 import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
@@ -106,6 +106,13 @@ const Auth = () => {
               setPassword(e.target.value);
             }}
           />
+        </Box>
+
+        <Box mb={2}>
+          <Alert severity="info">
+            You could login with any credentials, even with empty fields. It
+            doesn't matter. Just for demonstration purposes.
+          </Alert>
         </Box>
 
         <Button

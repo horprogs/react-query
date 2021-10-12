@@ -36,10 +36,13 @@ const exclude = [/assets\//];
 
 axios.interceptors.response.use((response) => {
   if (!exclude.find((pattern) => pattern.test(response?.config?.url!))) {
+    // eslint-disable-next-line no-console
     console.groupCollapsed(
       `<= ${response?.config?.method?.toUpperCase()} ${response.config.url}`
     );
+    // eslint-disable-next-line no-console
     console.dir(clone(response));
+    // eslint-disable-next-line no-console
     console.groupEnd();
   }
 
@@ -69,18 +72,8 @@ export const initializeMockAdapter = () => {
     ];
   });
 
-  mock.onPost(apiRoutes.getTokenByPassword).reply((config) => {
-    const { email, password } = JSON.parse(config.data);
-
-    if (email === 'admin@test.com' && password === 'root') {
-      return [200, { token: ADMIN_TOKEN }];
-    }
-
-    if (email === 'moderator@test.com' && password === 'root') {
-      return [200, { token: MODERATOR_TOKEN }];
-    }
-
-    return [403];
+  mock.onPost(apiRoutes.getTokenByPassword).reply(() => {
+    return [200, { token: ADMIN_TOKEN }];
   });
 
   mock.onGet(apiRoutes.getProfile).reply((config) => {

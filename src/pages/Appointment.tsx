@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Box, Button, Card, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Typography } from '@mui/material';
 import {
   useGetAppointment,
   useGetInsurance,
@@ -23,7 +23,7 @@ const Appointment = () => {
 
   if (isLoading) {
     return (
-      <Box>
+      <Box data-testid="appointment-skeleton">
         <Box mb={2}>
           <Card>
             <Skeleton variant="rectangular" height={303} animation="wave" />
@@ -116,6 +116,13 @@ const Appointment = () => {
             <Typography display="block" variant="h4" component="h4">
               Jobs
             </Typography>
+            <Box mb={2}>
+              <Alert severity="info">
+                Appointment with id = 2 will always cause the error for
+                creating/deleting jobs to demonstrate the optimistic change
+                rollback.
+              </Alert>
+            </Box>
             <Jobs appointmentId={data.id} />
           </Box>
         </Card>

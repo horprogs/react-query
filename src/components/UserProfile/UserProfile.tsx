@@ -2,9 +2,7 @@ import React from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import { useGetProfile } from '../../api/auth';
 
-type Props = {};
-
-const UserProfile = ({}: Props) => {
+const UserProfile = () => {
   const { data: user, isLoading } = useGetProfile();
 
   if (isLoading) {
