@@ -1,3 +1,5 @@
+![public/docs/logo.svg](public/docs/logo.svg)
+
 # Building the real app with React Query
 
 An example of building the app using React Query.
