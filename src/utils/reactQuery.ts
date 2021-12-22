@@ -88,13 +88,9 @@ const useGenericMutation = <T, S>(
 
       const previousData = queryClient.getQueryData([url!, params]);
 
-      if (updater) {
-        queryClient.setQueryData<T>([url!, params], (oldData) => {
-          return updater(oldData!, data);
-        });
-      } else {
-        queryClient.setQueryData<S>([url!, params], () => data);
-      }
+      queryClient.setQueryData<T>([url!, params], (oldData) => {
+        return updater ? updater(oldData!, data) : data;
+      });
 
       return previousData;
     },
