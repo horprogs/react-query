@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "jest --maxWorkers=4",
     "eject": "react-scripts eject",
-    "lint": "npx eslint src --ext ts,tsx"
+    "lint": "tsc && npx eslint src --ext ts,tsx"
   },
   "eslintConfig": {
     "extends": [

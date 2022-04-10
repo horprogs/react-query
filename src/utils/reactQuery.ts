@@ -75,21 +75,21 @@ export const useFetch = <T>(
 };
 
 const useGenericMutation = <T, S>(
-  func: (data: S) => Promise<AxiosResponse<S>>,
+  func: (data: T | S) => Promise<AxiosResponse<S>>,
   url: string,
   params?: object,
   updater?: ((oldData: T, newData: S) => T) | undefined
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation<AxiosResponse, AxiosError, S>(func, {
+  return useMutation<AxiosResponse, AxiosError, T | S>(func, {
     onMutate: async (data) => {
       await queryClient.cancelQueries([url!, params]);
 
       const previousData = queryClient.getQueryData([url!, params]);
 
       queryClient.setQueryData<T>([url!, params], (oldData) => {
-        return updater ? updater(oldData!, data) : data;
+        return updater ? updater(oldData!, data as S) : (data as T);
       });
 
       return previousData;
