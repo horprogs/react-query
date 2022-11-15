@@ -4,7 +4,7 @@
 
 An example of building the app using React Query.
 
-**Demo:** https://react-query-tutorial.herokuapp.com/
+**Demo:** https://react-query-example-3qmdb.ondigitalocean.app/
 
 **Article:** https://www.smashingmagazine.com/2022/01/building-real-app-react-query/
 
