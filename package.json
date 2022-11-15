@@ -2,7 +2,7 @@
   "name": "react-query-tutorial",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://react-query-tutorial.herokuapp.com/",
+  "homepage": "https://horprogs.github.io/react-query-example",
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -29,7 +29,9 @@
     "build": "react-scripts build",
     "test": "jest --maxWorkers=4",
     "eject": "react-scripts eject",
-    "lint": "tsc && npx eslint src --ext ts,tsx"
+    "lint": "tsc && npx eslint src --ext ts,tsx",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -69,6 +71,7 @@
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-jest": "^24.4.2",
     "eslint-plugin-prettier": "^4.0.0",
+    "gh-pages": "^4.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "27.2.0",
     "prettier": "^2.3.2",
